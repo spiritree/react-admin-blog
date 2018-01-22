@@ -113,24 +113,14 @@ export default class Analysis extends Component {
   }
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { currentTabKey } = this.state;
     const { chart, loading } = this.props;
     const {
       visitData,
       visitData2,
-      salesData,
       searchData,
       offlineData,
-      offlineChartData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
     } = chart;
-
-    const salesPieData =
-      salesType === 'all'
-        ? salesTypeData
-        : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
 
     const menu = (
       <Menu>
@@ -145,30 +135,6 @@ export default class Analysis extends Component {
           <Icon type="ellipsis" />
         </Dropdown>
       </span>
-    );
-
-    const salesExtra = (
-      <div className={styles.salesExtraWrap}>
-        <div className={styles.salesExtra}>
-          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-            今日
-          </a>
-          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-            本周
-          </a>
-          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
-            本月
-          </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
-            全年
-          </a>
-        </div>
-        <RangePicker
-          value={rangePickerValue}
-          onChange={this.handleRangePickerChange}
-          style={{ width: 256 }}
-        />
-      </div>
     );
 
     const columns = [
@@ -323,59 +289,6 @@ export default class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
-          <div className={styles.salesCard}>
-            <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane tab="销售额" key="sales">
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar height={295} title="销售额趋势" data={salesData} />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tab="访问量" key="views">
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar height={292} title="访问量趋势" data={salesData} />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店访问量排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-            </Tabs>
-          </div>
-        </Card>
-
         <Row gutter={24}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <Card
@@ -426,62 +339,7 @@ export default class Analysis extends Component {
               />
             </Card>
           </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              className={styles.salesCard}
-              bordered={false}
-              title="销售额类别占比"
-              bodyStyle={{ padding: 24 }}
-              extra={
-                <div className={styles.salesCardExtra}>
-                  {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">全部渠道</Radio.Button>
-                      <Radio.Button value="online">线上</Radio.Button>
-                      <Radio.Button value="offline">门店</Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-              }
-              style={{ marginTop: 24, minHeight: 509 }}
-            >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
-              <Pie
-                hasLegend
-                subTitle="销售额"
-                total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
-                data={salesPieData}
-                valueFormat={val => yuan(val)}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
-          </Col>
         </Row>
-
-        <Card
-          loading={loading}
-          className={styles.offlineCard}
-          bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
-          style={{ marginTop: 32 }}
-        >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{ y1: '客流量', y2: '支付笔数' }}
-                  />
-                </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </Card>
       </div>
     );
   }

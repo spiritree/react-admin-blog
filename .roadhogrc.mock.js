@@ -16,6 +16,9 @@ const proxy = {
   // 支持值为 Object 和 Array
   'GET /api/(.*)': 'http://localhost:8001/api',
   'POST /api/(.*)': 'http://localhost:8001/api',
+  'DELETE /api/(.*)': 'http://localhost:8001/api',
+  'PUT /api/(.*)': 'http://localhost:8001/api',
+  'PATCH /api/(.*)': 'http://localhost:8001/api',
   'GET /api/currentUser': {
     $desc: "获取当前用户接口",
     $params: {

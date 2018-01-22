@@ -92,9 +92,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'React admin';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+      title = `${routerData[pathname].name} - React admin`;
     }
     return title;
   }
@@ -203,24 +203,14 @@ class BasicLayout extends React.PureComponent {
           </Content>
           <GlobalFooter
             links={[{
-              key: 'Pro 首页',
-              title: 'Pro 首页',
-              href: 'http://pro.ant.design',
-              blankTarget: true,
-            }, {
               key: 'github',
               title: <Icon type="github" />,
-              href: 'https://github.com/ant-design/ant-design-pro',
-              blankTarget: true,
-            }, {
-              key: 'Ant Design',
-              title: 'Ant Design',
-              href: 'http://ant.design',
+              href: 'https://github.com/spiritree/react-admin-blog',
               blankTarget: true,
             }]}
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                Copyright <Icon type="copyright" /> 2018 React-admin-blog
               </div>
             }
           />

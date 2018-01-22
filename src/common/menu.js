@@ -1,13 +1,13 @@
 import { isUrl } from '../utils/utils';
 
 const menuData = [{
-  name: 'dashboard',
+  name: 'Dashboard',
   icon: 'dashboard',
-  path: 'dashboard',
-  children: [{
-    name: '分析页',
-    path: 'analysis',
-  }],
+  path: 'dashboard/analysis',
+}, {
+  name: '标签管理',
+  icon: 'tag',
+  path: 'tag',
 }, {
   name: '表单页',
   icon: 'form',

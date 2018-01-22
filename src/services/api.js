@@ -10,6 +10,35 @@ export async function authLogin(params) {
   });
 }
 
+export async function getTagList(params) {
+  return request(`/api/tag?${stringify(params)}`);
+}
+
+export async function addTag(params) {
+  return request('/api/tag', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function deleteTag(params) {
+  return request(`/api/tag/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function updateTag(params) {
+  const { _id } = params;
+  return request(`/api/tag/${_id}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

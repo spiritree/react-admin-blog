@@ -7,29 +7,15 @@ import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
 
-const links = [{
-  key: 'help',
-  title: '帮助',
-  href: '',
-}, {
-  key: 'privacy',
-  title: '隐私',
-  href: '',
-}, {
-  key: 'terms',
-  title: '条款',
-  href: '',
-}];
-
-const copyright = <div>Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品</div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018 React-admin-blog</div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'React admin';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+      title = `${routerData[pathname].name} - React admin`;
     }
     return title;
   }
@@ -43,10 +29,10 @@ class UserLayout extends React.PureComponent {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>Ant Design</span>
+                  <span className={styles.title}>React admin</span>
                 </Link>
               </div>
-              <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+              <div className={styles.desc}>React + Antd + Koa2 + TypeScript</div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item =>
@@ -62,7 +48,7 @@ class UserLayout extends React.PureComponent {
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
+          <GlobalFooter copyright={copyright} />
         </div>
       </DocumentTitle>
     );
