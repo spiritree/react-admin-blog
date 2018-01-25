@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Checkbox, Alert, Icon, notification } from 'antd';
+import { Checkbox, Alert, Icon } from 'antd';
 import Login from '../../components/Login';
 import styles from './Login.less';
 
@@ -40,13 +40,6 @@ export default class LoginPage extends Component {
     });
   }
 
-  triggerNotification = () => {
-    notification.success({
-      duration: 2,
-      message: '登陆成功',
-    });
-  }
-
   renderMessage = (content) => {
     return (
       <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
@@ -55,6 +48,7 @@ export default class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
+    console.log(login)
     const { type } = this.state;
     return (
       <div className={styles.main}>
@@ -67,10 +61,6 @@ export default class LoginPage extends Component {
             {
               login.code === 0 &&
               this.renderMessage('账户或密码错误')
-            }
-            {
-              login.code === 1 &&
-              this.triggerNotification()
             }
             <UserName name="username" placeholder="spiritree" />
             <Password name="password" placeholder="123456" />

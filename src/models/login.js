@@ -1,12 +1,15 @@
-// import { routerRedux } from 'dva/router';
+import { notification } from 'antd';
+import { routerRedux } from 'dva/router';
 import { authLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
+import { reloadAuthorized } from '../utils/Authorized';
 
 export default {
   namespace: 'login',
 
   state: {
     status: undefined,
+    code: -1,
   },
 
   effects: {
@@ -14,21 +17,23 @@ export default {
       const response = yield call(authLogin, payload);
       // Login successfully
       if (response.code === 1) {
-        // 非常粗暴的跳转,登陆成功之后权限会变成user或admin,会自动重定向到主页
-        // Login success after permission changes to admin or user
-        // The refresh will automatically redirect to the home page
-        // yield put(routerRedux.push('/dashboard'));
+        window.localStorage.setItem('TOKEN', JSON.stringify(response.result));
         yield put({
-          type: 'changeLoginStatus',
+          type: 'changeLoginInStatus',
           payload: {
             response,
             currentAuthority: 'admin',
           },
         });
-        window.location.reload();
+        reloadAuthorized();
+        yield put(routerRedux.push('/'));
+        notification.success({
+          duration: 2,
+          message: '登陆成功',
+        });
       } else {
         yield put({
-          type: 'changeLoginStatus',
+          type: 'changeLoginInStatus',
           payload: {
             response,
             currentAuthority: 'guest',
@@ -49,24 +54,31 @@ export default {
         // Login out after permission changes to admin or user
         // The refresh will automatically redirect to the login page
         yield put({
-          type: 'changeLoginStatus',
+          type: 'changeLoginOutStatus',
           payload: {
             status: false,
             currentAuthority: 'guest',
           },
         });
-        window.location.reload();
+        reloadAuthorized();
+        yield put(routerRedux.push('/user/login'));
       }
     },
   },
 
   reducers: {
     // 对返回后的请求结果进行计算生成新的返回值
-    changeLoginStatus(state, { payload }) {
+    changeLoginInStatus(state, { payload }) {
+      setAuthority(payload.currentAuthority);
+      return {
+        status: state.status,
+        code: payload.response.code,
+      };
+    },
+    changeLoginOutStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        code: payload.response.code,
       };
     },
   },
