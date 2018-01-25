@@ -9,19 +9,15 @@ const menuData = [{
   icon: 'tag',
   path: 'tag',
 }, {
-  name: '表单页',
-  icon: 'form',
-  path: 'form',
+  name: '笔记管理',
+  icon: 'profile',
+  path: 'article',
   children: [{
-    name: '基础表单',
-    path: 'basic-form',
+    name: '笔记列表',
+    path: 'list',
   }, {
-    name: '分步表单',
-    path: 'step-form',
-  }, {
-    name: '高级表单',
-    authority: 'admin',
-    path: 'advanced-form',
+    name: '发布笔记',
+    path: 'release',
   }],
 }, {
   name: '列表页',
@@ -49,34 +45,6 @@ const menuData = [{
       name: '搜索列表（应用）',
       path: 'applications',
     }],
-  }],
-}, {
-  name: '详情页',
-  icon: 'profile',
-  path: 'profile',
-  children: [{
-    name: '基础详情页',
-    path: 'basic',
-  }, {
-    name: '高级详情页',
-    path: 'advanced',
-    authority: 'admin',
-  }],
-},
-{
-  name: '账户',
-  icon: 'user',
-  path: 'user',
-  authority: 'guest',
-  children: [{
-    name: '登录',
-    path: 'login',
-  }, {
-    name: '注册',
-    path: 'register',
-  }, {
-    name: '注册结果',
-    path: 'register-result',
   }],
 }];
 

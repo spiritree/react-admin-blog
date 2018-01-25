@@ -39,6 +39,36 @@ export async function updateTag(params) {
   });
 }
 
+export async function getArticleList(params) {
+  return request(`/api/article?${stringify(params)}`);
+}
+
+export async function deleteArticle(params) {
+  return request(`/api/article/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function changeArticleStatus(params) {
+  const { _id, publish, state } = params;
+  if (publish) {
+    return request(`/api/article/${_id}`, {
+      method: 'PATCH',
+      body: {
+        publish,
+      },
+    });
+  }
+  if (state) {
+    return request(`/api/article/${_id}`, {
+      method: 'PATCH',
+      body: {
+        state,
+      },
+    });
+  }
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
