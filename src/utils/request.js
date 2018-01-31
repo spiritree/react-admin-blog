@@ -49,11 +49,17 @@ export default function request(url, options) {
   const newOptions = { ...defaultOptions, ...options };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT' || newOptions.method === 'PATCH') {
     newOptions.headers = {
+      Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('TOKEN') || '').token}`,
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
       ...newOptions.headers,
     };
     newOptions.body = JSON.stringify(newOptions.body);
+  }
+  if (newOptions.method === 'DELETE') {
+    newOptions.headers = {
+      Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('TOKEN') || '').token}`,
+    };
   }
 
   return fetch(url, newOptions)
