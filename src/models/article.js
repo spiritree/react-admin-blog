@@ -1,5 +1,6 @@
 import { message } from 'antd';
-import { getArticleList, deleteArticle, changeArticleStatus } from '../services/api';
+import { routerRedux } from 'dva/router';
+import { getArticleList, deleteArticle, changeArticleStatus, postArticle, updateArticle } from '../services/api';
 
 export default {
   namespace: 'article',
@@ -30,9 +31,9 @@ export default {
           type: 'getArticleList',
           payload: list,
         });
-        message.success('删除成功');
+        message.success(response.message);
       } else {
-        message.error('删除失败');
+        message.error(response.message);
       }
     },
     *changePublish({ payload }, { call, put }) {
@@ -43,12 +44,12 @@ export default {
       const list = yield call(getArticleList, params);
       if (response.code === 1) {
         yield put({
-          type: 'getTagList',
+          type: 'refreshPublish',
           payload: list,
         });
-        message.success('更新成功');
+        message.success(response.message);
       } else {
-        message.error('更新失败');
+        message.error(response.message);
       }
     },
     *changeState({ payload }, { call, put }) {
@@ -59,16 +60,33 @@ export default {
       const list = yield call(getArticleList, params);
       if (response.code === 1) {
         yield put({
-          type: 'getTagList',
+          type: 'refreshState',
           payload: list,
         });
-        message.success('更新成功');
+        message.success(response.message);
       } else {
-        message.error('更新失败');
+        message.error(response.message);
+      }
+    },
+    *submit({ payload }, { call, put }) {
+      const response = yield call(postArticle, payload);
+      if (response.code === 1) {
+        message.success(response.message);
+        yield put(routerRedux.push('/article/list'));
+      } else {
+        message.error(response.message);
+      }
+    },
+    *patch({ payload }, { call, put }) {
+      const response = yield call(updateArticle, payload);
+      if (response.code === 1) {
+        message.success(response.message);
+        yield put(routerRedux.push('/article/list'));
+      } else {
+        message.error(response.message);
       }
     },
   },
-
   reducers: {
     getArticleList(state, action) {
       return {
@@ -76,5 +94,28 @@ export default {
         data: action.payload,
       };
     },
+    // 不能共用一个状态否则无法更新
+    refreshPublish(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
+    refreshState(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
   },
+  // subscriptions: {
+  //   setup({ history, dispatch }) {
+  //     // 监听 history 变化，当进入 `/` 时触发 `load` action
+  //     return history.listen(({ pathname }) => {
+  //       if (pathname === '/article/list') {
+  //         dispatch({ type: 'fetch' });
+  //       }
+  //     });
+  //   },
+  // },
 };

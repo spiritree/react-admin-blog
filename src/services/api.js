@@ -69,6 +69,30 @@ export async function changeArticleStatus(params) {
   }
 }
 
+export async function postArticle(params) {
+  return request('/api/article', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function updateArticle(params) {
+  console.log(params)
+  const { _id } = params;
+  return request(`/api/article/${_id}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function getArticleDetail(params) {
+  return request(`/api/article/${params}`);
+}
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }

@@ -9,6 +9,9 @@ import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import FastClick from 'fastclick';
 
+import 'simplemde/dist/simplemde.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 import './index.less';
 // 1. Initialize
 const app = dva({

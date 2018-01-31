@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Card, List, Form, Tag, Icon, Button, Radio } from 'antd';
+import { routerRedux } from 'dva/router';
+import { Card, List, Form, Tag, Icon, Radio } from 'antd';
 
 import DropOption from '../../components/DropOption';
 import StandardFormRow from '../../components/StandardFormRow';
 import HeaderSearch from '../../components/HeaderSearch';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './List.less';
 
 const FormItem = Form.Item;
@@ -18,11 +20,7 @@ const RadioGroup = Radio.Group;
   tag,
   loading: loading.models.article,
 }))
-export default class SearchList extends Component {
-  state = {
-    size: 'small',
-  }
-
+export default class ArticleList extends Component {
   componentDidMount() {
     this.fetchMore();
   }
@@ -32,7 +30,7 @@ export default class SearchList extends Component {
     const newPublish = publish === 1 ? 2 : 1;
     const newState = state === 1 ? 2 : 1;
     if (e.key === '1') {
-      console.log(item)
+      this.handleEdit(_id);
     } else if (e.key === '2') {
       this.handleDelete(_id);
     } else if (e.key === '3') {
@@ -54,11 +52,15 @@ export default class SearchList extends Component {
 
   fetchMore = () => {
     const { dispatch } = this.props;
+    const params = {
+      page_size: 10,
+    };
     dispatch({
       type: 'tag/fetch',
     });
     dispatch({
       type: 'article/fetch',
+      payload: params,
     });
   }
 
@@ -66,7 +68,6 @@ export default class SearchList extends Component {
     const { dispatch } = this.props;
     this.props.form.setFieldsValue({ tag: e.target.value });
     const params = this.props.form.getFieldsValue();
-    console.log(params)
     dispatch({
       type: 'article/fetch',
       payload: params,
@@ -115,6 +116,17 @@ export default class SearchList extends Component {
     });
   }
 
+  handleEdit = (_id) => {
+    const id = _id;
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push({
+      pathname: '/article/release',
+      state: {
+        id,
+      },
+    }));
+  }
+
   handleDelete = (_id) => {
     const { dispatch } = this.props;
     dispatch({
@@ -124,11 +136,30 @@ export default class SearchList extends Component {
   }
 
   render() {
+    const { loading } = this.props;
     const tagList = this.props.tag.data.result.list;
     const articleList = this.props.article.data.result.list;
+    const articlePagination = this.props.article.data.result.pagination;
     const { getFieldDecorator } = this.props.form;
-    const loading = false;
-    const { size } = this.state;
+
+    const pagination = {
+      pageSize: 10,
+      current: articlePagination.current_page,
+      total: articlePagination.total,
+      onChange: ((page, pagesize) => {
+        const { dispatch } = this.props;
+
+        const params = {
+          current_page: page,
+          page_size: pagesize,
+        };
+
+        dispatch({
+          type: 'article/fetch',
+          payload: params,
+        });
+      }),
+    };
 
     const formatEnumOptions = (value, source) => {
       for (const item of source) {
@@ -159,7 +190,7 @@ export default class SearchList extends Component {
       </span>
     );
 
-    const ListContent = ({ data: { descript, create_at, meta, publish, state, tag } }) => (
+    const ListContent = ({ data: { descript, create_at } }) => (
       <div className={styles.listContent}>
         <div className={styles.description}>{descript}</div>
         <div className={styles.extra}>
@@ -175,16 +206,10 @@ export default class SearchList extends Component {
       { key: '4', name: '切换发布/草稿' },
     ];
 
-    const loadMore = articleList.length > 0 ? (
-      <div style={{ textAlign: 'center', marginTop: 16 }}>
-        <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
-          {loading ? <span><Icon type="loading" /> 加载中...</span> : '加载更多'}
-        </Button>
-      </div>
-    ) : null;
-
     return (
-      <div>
+      <PageHeaderLayout
+        title=""
+      >
         <Card bordered={false}>
           <Form layout="inline">
             <StandardFormRow title="标签" block style={{ paddingBottom: 11 }}>
@@ -245,10 +270,10 @@ export default class SearchList extends Component {
         >
           <List
             size="large"
-            loading={articleList.length === 0 ? loading : false}
+            loading={loading}
             rowKey="id"
             itemLayout="vertical"
-            loadMore={loadMore}
+            pagination={pagination}
             dataSource={articleList}
             renderItem={item => (
               <List.Item
@@ -289,7 +314,7 @@ export default class SearchList extends Component {
             )}
           />
         </Card>
-      </div>
+      </PageHeaderLayout>
     );
   }
 }
