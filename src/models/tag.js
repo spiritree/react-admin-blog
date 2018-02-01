@@ -30,9 +30,9 @@ export default {
           type: 'getTagList',
           payload: list,
         });
-        message.success('添加成功');
+        message.success(response.message);
       } else {
-        message.error('添加失败');
+        message.error(response.message);
       }
     },
     *delete({ payload }, { call, put }) {
@@ -43,9 +43,9 @@ export default {
           type: 'getTagList',
           payload: list,
         });
-        message.success('删除成功');
+        message.success(response.message);
       } else {
-        message.error('删除失败');
+        message.error(response.message);
       }
     },
     *update({ payload }, { call, put }) {
@@ -59,9 +59,9 @@ export default {
           type: 'getTagList',
           payload: list,
         });
-        message.success('更新成功');
+        message.success(response.message);
       } else {
-        message.error('更新失败');
+        message.error(response.message);
       }
     },
   },
