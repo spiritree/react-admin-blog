@@ -15,8 +15,9 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 @Form.create()
-@connect(({ article, tag, loading }) => ({
+@connect(({ article, category, tag, loading }) => ({
   article,
+  category,
   tag,
   loading: loading.models.article,
 }))
@@ -58,6 +59,16 @@ export default class ArticleList extends Component {
     dispatch({
       type: 'tag/fetch',
     });
+    dispatch({
+      type: 'article/fetch',
+      payload: params,
+    });
+  }
+
+  handleCategoryRadio = (e) => {
+    const { dispatch } = this.props;
+    this.props.form.setFieldsValue({ category: e.target.value });
+    const params = this.props.form.getFieldsValue();
     dispatch({
       type: 'article/fetch',
       payload: params,
@@ -137,9 +148,10 @@ export default class ArticleList extends Component {
 
   render() {
     const { loading } = this.props;
-    const tagList = this.props.tag.data.result.list;
-    const articleList = this.props.article.data.result.list;
-    const articlePagination = this.props.article.data.result.pagination;
+    const categoryList = this.props.category.data.result.list || [];
+    const tagList = this.props.tag.data.result.list || [];
+    const articleList = this.props.article.data.result.list || [];
+    const articlePagination = this.props.article.data.result.pagination || [];
     const { getFieldDecorator } = this.props.form;
 
     const pagination = {
@@ -212,6 +224,20 @@ export default class ArticleList extends Component {
       >
         <Card bordered={false}>
           <Form layout="inline">
+            <StandardFormRow title="分类" block style={{ paddingBottom: 11 }}>
+              <FormItem>
+                {getFieldDecorator('category')(
+                  <RadioGroup onChange={this.handleCategoryRadio}>
+                    <RadioButton>全部</RadioButton>
+                    {
+                      categoryList.map(item =>
+                        <RadioButton key={item.id} value={item._id}>{item.name}</RadioButton>
+                      )
+                    }
+                  </RadioGroup>
+                  )}
+              </FormItem>
+            </StandardFormRow>
             <StandardFormRow title="标签" block style={{ paddingBottom: 11 }}>
               <FormItem>
                 {getFieldDecorator('tag')(
@@ -256,7 +282,7 @@ export default class ArticleList extends Component {
             </StandardFormRow>
             <StandardFormRow title="搜索" block style={{ paddingBottom: 11 }}>
               <HeaderSearch
-                placeholder="站内搜索"
+                placeholder="搜索文章"
                 dataSource={articleNameList}
                 onPressEnter={this.handleSearch}
               />

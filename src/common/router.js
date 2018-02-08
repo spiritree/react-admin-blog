@@ -75,17 +75,29 @@ export const getRouterData = (app) => {
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
+    '/article/list': {
+      component: dynamicWrapper(app, ['category', 'tag', 'article'], () => import('../routes/Article/List')),
+    },
+    '/article/release': {
+      component: dynamicWrapper(app, ['category', 'tag', 'article'], () => import('../routes/Article/Release')),
+    },
+    '/article/release/:id': {
+      component: dynamicWrapper(app, ['category', 'tag', 'article', 'articleDetail'], () => import('../routes/Article/Release')),
+    },
+    '/category': {
+      component: dynamicWrapper(app, ['category'], () => import('../routes/Category/Category')),
+    },
     '/tag': {
       component: dynamicWrapper(app, ['tag'], () => import('../routes/Tag/Tag')),
     },
-    '/article/list': {
-      component: dynamicWrapper(app, ['tag', 'article'], () => import('../routes/Article/List')),
+    '/comment': {
+      component: dynamicWrapper(app, ['comment'], () => import('../routes/Comment/Comment')),
     },
-    '/article/release': {
-      component: dynamicWrapper(app, ['tag', 'article'], () => import('../routes/Article/Release')),
+    '/message': {
+      component: dynamicWrapper(app, ['message'], () => import('../routes/Message/Message')),
     },
-    '/article/release/:id': {
-      component: dynamicWrapper(app, ['tag', 'article', 'articleDetail'], () => import('../routes/Article/Release')),
+    '/option': {
+      component: dynamicWrapper(app, ['option'], () => import('../routes/Option/Option')),
     },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),

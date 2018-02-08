@@ -10,35 +10,6 @@ export async function authLogin(params) {
   });
 }
 
-export async function getTagList(params) {
-  return request(`/api/tag?${stringify(params)}`);
-}
-
-export async function addTag(params) {
-  return request('/api/tag', {
-    method: 'POST',
-    body: {
-      ...params,
-    },
-  });
-}
-
-export async function deleteTag(params) {
-  return request(`/api/tag/${params}`, {
-    method: 'DELETE',
-  });
-}
-
-export async function updateTag(params) {
-  const { _id } = params;
-  return request(`/api/tag/${_id}`, {
-    method: 'PUT',
-    body: {
-      ...params,
-    },
-  });
-}
-
 export async function getArticleList(params) {
   return request(`/api/article?${stringify(params)}`);
 }
@@ -79,7 +50,6 @@ export async function postArticle(params) {
 }
 
 export async function updateArticle(params) {
-  console.log(params)
   const { _id } = params;
   return request(`/api/article/${_id}`, {
     method: 'PUT',
@@ -91,6 +61,135 @@ export async function updateArticle(params) {
 
 export async function getArticleDetail(params) {
   return request(`/api/article/${params}`);
+}
+
+export async function getTagList(params) {
+  return request(`/api/tag?${stringify(params)}`);
+}
+
+export async function addTag(params) {
+  return request('/api/tag', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function deleteTag(params) {
+  return request(`/api/tag/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function updateTag(params) {
+  const { _id } = params;
+  return request(`/api/tag/${_id}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function getCommentList(params) {
+  return request(`/api/comment?${stringify(params)}`);
+}
+
+export async function deleteComment(params) {
+  return request(`/api/comment/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function changeCommentState(params) {
+  const { _id, state, post_id } = params;
+  return request(`/api/comment/${_id}`, {
+    method: 'PATCH',
+    body: {
+      state,
+      post_id,
+    },
+  });
+}
+
+export async function getCategoryList(params) {
+  return request(`/api/category?${stringify(params)}`);
+}
+
+export async function addCategory(params) {
+  return request('/api/category', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function deleteCategory(params) {
+  return request(`/api/category/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function updateCategory(params) {
+  const { _id } = params;
+  return request(`/api/category/${_id}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function getMessageList(params) {
+  return request(`/api/message?${stringify(params)}`);
+}
+
+export async function deleteMessage(params) {
+  return request(`/api/message/${params}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function changeMessageState(params) {
+  const { _id, state } = params;
+  return request(`/api/message/${_id}`, {
+    method: 'PATCH',
+    body: {
+      state,
+    },
+  });
+}
+
+export async function getOption(params) {
+  return request(`/api/option?${stringify(params)}`);
+}
+
+export async function updateOption(params) {
+  let _id = '';
+  if (params._id) {
+    _id = { params };
+  }
+  return request(`/api/option/${_id}`, {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function getAuth(params) {
+  return request(`/api/auth?${stringify(params)}`);
+}
+
+export async function updateAuth(params) {
+  return request('/api/auth', {
+    method: 'PUT',
+    body: {
+      ...params,
+    },
+  });
 }
 
 export async function queryProjectNotice() {

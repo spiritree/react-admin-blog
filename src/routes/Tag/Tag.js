@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Icon, Button, Dropdown, Menu, Table, Modal, Popconfirm } from 'antd';
+import { Row, Col, Card, Form, Input, Button, Table, Modal, Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Tag.less';
 
@@ -13,12 +13,11 @@ const { TextArea } = Input;
   loading: loading.models.tag,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class TagList extends PureComponent {
   state = {
     createModalVisible: false,
     updateModalVisible: false,
     expandForm: false,
-    selectedRows: [],
     id: '',
   };
 
@@ -52,12 +51,6 @@ export default class TableList extends PureComponent {
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-  }
-
-  handleSelectRows = (rows) => {
-    this.setState({
-      selectedRows: rows,
-    });
   }
 
   handleSearch = (e) => {
@@ -263,14 +256,6 @@ export default class TableList extends PureComponent {
 
   render() {
     const { tag: { data: { result: { list, pagination } } }, loading } = this.props;
-    const { selectedRows } = this.state;
-
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
 
     return (
       <PageHeaderLayout title="标签列表">
@@ -283,18 +268,6 @@ export default class TableList extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleCreateModalVisible(true)}>
                 新建
               </Button>
-              {
-                selectedRows.length > 0 && (
-                  <span>
-                    <Button>批量操作</Button>
-                    <Dropdown overlay={menu}>
-                      <Button>
-                        更多操作 <Icon type="down" />
-                      </Button>
-                    </Dropdown>
-                  </span>
-                )
-              }
             </div>
             {/* <StandardTable
               selectedRows={selectedRows}

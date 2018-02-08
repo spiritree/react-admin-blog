@@ -34,8 +34,9 @@ const state = [
 ];
 
 @Form.create()
-@connect(({ articleDetail, tag, loading }) => ({
+@connect(({ articleDetail, category, tag, loading }) => ({
   articleDetail,
+  category,
   tag,
   submitting: loading.effects['article/submit'],
 }))
@@ -57,22 +58,29 @@ export default class articleRelease extends PureComponent {
     dispatch({
       type: 'tag/fetch',
     });
+    dispatch({
+      type: 'category/fetch',
+    });
     if (this.props.location.state !== undefined) {
       const params = this.props.location.state.id;
       await dispatch({
         type: 'articleDetail/edit',
         payload: params,
       });
-      const { title, keyword, descript, tag, content, publish, state } = this.props.articleDetail.data.result;
-      const detailTagList = [];
+      const { title, keyword, descript, category, tag, content, publish, state } = this.props.articleDetail.data.result;
+      const [detailTagList, detailCategory] = [tag, category];
       tag.forEach((item) => {
         detailTagList.push(item._id);
+      });
+      category.forEach((item) => {
+        detailCategory.push(item._id);
       });
       this.smde.value(content);
       this.props.form.setFieldsValue({
         title,
         keyword,
         descript,
+        category: detailCategory,
         tag: detailTagList,
         publish,
         state,
@@ -93,7 +101,9 @@ export default class articleRelease extends PureComponent {
 
   render() {
     const { form, dispatch, submitting } = this.props;
+    console.log(this.props)
     const tagList = this.props.tag.data.result.list;
+    const categoryList = this.props.category.data.result.list;
     const { getFieldDecorator, validateFieldsAndScroll } = form;
 
     const validate = () => {
@@ -109,7 +119,7 @@ export default class articleRelease extends PureComponent {
             dispatch({
               type: 'article/patch',
               payload: values,
-            })
+            });
           } else {
             dispatch({
               type: 'article/submit',
@@ -148,14 +158,27 @@ export default class articleRelease extends PureComponent {
                     <TextArea placeholder="请输入笔记描述" autosize={{ minRows: 2 }} />
                   )}
                 </Form.Item>
+                <Form.Item {...formItemLayout} label="笔记分类">
+                  {getFieldDecorator('category', {
+                    rules: [{ required: true, message: '请选择笔记分类' }],
+                  })(
+                    <TagSelect expandable>
+                      {
+                        categoryList.map(item =>
+                          <TagSelect.Option key={item.id} value={item._id}>{item.name}</TagSelect.Option>
+                        )
+                      }
+                    </TagSelect>
+                  )}
+                </Form.Item>
                 <Form.Item {...formItemLayout} label="笔记标签">
                   {getFieldDecorator('tag', {
                     rules: [{ required: true, message: '请选择笔记标签' }],
                   })(
                     <TagSelect expandable>
                       {
-                        tagList.map(tag =>
-                          <TagSelect.Option key={tag.id} value={tag._id}>{tag.name}</TagSelect.Option>
+                        tagList.map(item =>
+                          <TagSelect.Option key={item.id} value={item._id}>{item.name}</TagSelect.Option>
                         )
                       }
                     </TagSelect>

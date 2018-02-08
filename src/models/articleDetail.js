@@ -26,7 +26,6 @@ export default {
     },
   },
   reducers: {
-    // 名字也最好不一样，我佛
     getDetail(state, action) {
       return {
         ...state,

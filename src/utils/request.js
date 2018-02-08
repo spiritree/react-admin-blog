@@ -48,8 +48,14 @@ export default function request(url, options) {
   };
   const newOptions = { ...defaultOptions, ...options };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT' || newOptions.method === 'PATCH') {
+    let auth = '';
+    if (window.localStorage.getItem('TOKEN') == null) {
+      auth = '';
+    } else {
+      auth = `Bearer ${JSON.parse(window.localStorage.getItem('TOKEN') || '').token}`;
+    }
     newOptions.headers = {
-      Authorization: `Bearer ${JSON.parse(window.localStorage.getItem('TOKEN') || '').token}`,
+      Authorization: auth,
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
       ...newOptions.headers,
