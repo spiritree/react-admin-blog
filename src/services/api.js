@@ -1,8 +1,10 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+const baseURL = `http://localhost:8001`
+
 export async function authLogin(params) {
-  return request('/api/auth/login', {
+  return request(`${baseURL}/api/auth/login`, {
     method: 'POST',
     body: {
       ...params,
@@ -11,11 +13,11 @@ export async function authLogin(params) {
 }
 
 export async function getArticleList(params) {
-  return request(`/api/article?${stringify(params)}`);
+  return request(`${baseURL}/api/article?${stringify(params)}`);
 }
 
 export async function deleteArticle(params) {
-  return request(`/api/article/${params}`, {
+  return request(`${baseURL}/api/article/${params}`, {
     method: 'DELETE',
   });
 }
@@ -23,7 +25,7 @@ export async function deleteArticle(params) {
 export async function changeArticleStatus(params) {
   const { _id, publish, state } = params;
   if (publish) {
-    return request(`/api/article/${_id}`, {
+    return request(`${baseURL}/api/article/${_id}`, {
       method: 'PATCH',
       body: {
         publish,
@@ -31,7 +33,7 @@ export async function changeArticleStatus(params) {
     });
   }
   if (state) {
-    return request(`/api/article/${_id}`, {
+    return request(`${baseURL}/api/article/${_id}`, {
       method: 'PATCH',
       body: {
         state,
@@ -41,7 +43,7 @@ export async function changeArticleStatus(params) {
 }
 
 export async function postArticle(params) {
-  return request('/api/article', {
+  return request(`${baseURL}/api/article`, {
     method: 'POST',
     body: {
       ...params,
@@ -51,7 +53,7 @@ export async function postArticle(params) {
 
 export async function updateArticle(params) {
   const { _id } = params;
-  return request(`/api/article/${_id}`, {
+  return request(`${baseURL}/api/article/${_id}`, {
     method: 'PUT',
     body: {
       ...params,
@@ -60,15 +62,15 @@ export async function updateArticle(params) {
 }
 
 export async function getArticleDetail(params) {
-  return request(`/api/article/${params}`);
+  return request(`${baseURL}/api/article/${params}`);
 }
 
 export async function getTagList(params) {
-  return request(`/api/tag?${stringify(params)}`);
+  return request(`${baseURL}/api/tag?${stringify(params)}`);
 }
 
 export async function addTag(params) {
-  return request('/api/tag', {
+  return request(`${baseURL}/api/tag`, {
     method: 'POST',
     body: {
       ...params,
@@ -77,14 +79,14 @@ export async function addTag(params) {
 }
 
 export async function deleteTag(params) {
-  return request(`/api/tag/${params}`, {
+  return request(`${baseURL}/api/tag/${params}`, {
     method: 'DELETE',
   });
 }
 
 export async function updateTag(params) {
   const { _id } = params;
-  return request(`/api/tag/${_id}`, {
+  return request(`${baseURL}/api/tag/${_id}`, {
     method: 'PUT',
     body: {
       ...params,
@@ -93,18 +95,18 @@ export async function updateTag(params) {
 }
 
 export async function getCommentList(params) {
-  return request(`/api/comment?${stringify(params)}`);
+  return request(`${baseURL}/api/comment?${stringify(params)}`);
 }
 
 export async function deleteComment(params) {
-  return request(`/api/comment/${params}`, {
+  return request(`${baseURL}/api/comment/${params}`, {
     method: 'DELETE',
   });
 }
 
 export async function changeCommentState(params) {
   const { _id, state, post_id } = params;
-  return request(`/api/comment/${_id}`, {
+  return request(`${baseURL}/api/comment/${_id}`, {
     method: 'PATCH',
     body: {
       state,
@@ -114,11 +116,11 @@ export async function changeCommentState(params) {
 }
 
 export async function getCategoryList(params) {
-  return request(`/api/category?${stringify(params)}`);
+  return request(`${baseURL}/api/category?${stringify(params)}`);
 }
 
 export async function addCategory(params) {
-  return request('/api/category', {
+  return request(`${baseURL}/api/category`, {
     method: 'POST',
     body: {
       ...params,
@@ -127,14 +129,14 @@ export async function addCategory(params) {
 }
 
 export async function deleteCategory(params) {
-  return request(`/api/category/${params}`, {
+  return request(`${baseURL}/api/category/${params}`, {
     method: 'DELETE',
   });
 }
 
 export async function updateCategory(params) {
   const { _id } = params;
-  return request(`/api/category/${_id}`, {
+  return request(`${baseURL}/api/category/${_id}`, {
     method: 'PUT',
     body: {
       ...params,
@@ -143,18 +145,18 @@ export async function updateCategory(params) {
 }
 
 export async function getMessageList(params) {
-  return request(`/api/message?${stringify(params)}`);
+  return request(`${baseURL}/api/message?${stringify(params)}`);
 }
 
 export async function deleteMessage(params) {
-  return request(`/api/message/${params}`, {
+  return request(`${baseURL}/api/message/${params}`, {
     method: 'DELETE',
   });
 }
 
 export async function changeMessageState(params) {
   const { _id, state } = params;
-  return request(`/api/message/${_id}`, {
+  return request(`${baseURL}/api/message/${_id}`, {
     method: 'PATCH',
     body: {
       state,
@@ -163,7 +165,7 @@ export async function changeMessageState(params) {
 }
 
 export async function getOption(params) {
-  return request(`/api/option?${stringify(params)}`);
+  return request(`${baseURL}/api/option?${stringify(params)}`);
 }
 
 export async function updateOption(params) {
@@ -171,7 +173,7 @@ export async function updateOption(params) {
   if (params._id) {
     _id = { params };
   }
-  return request(`/api/option/${_id}`, {
+  return request(`${baseURL}/api/option/${_id}`, {
     method: 'PUT',
     body: {
       ...params,
@@ -180,11 +182,11 @@ export async function updateOption(params) {
 }
 
 export async function getAuth(params) {
-  return request(`/api/auth?${stringify(params)}`);
+  return request(`${baseURL}/api/auth?${stringify(params)}`);
 }
 
 export async function updateAuth(params) {
-  return request('/api/auth', {
+  return request(`${baseURL}/api/auth`, {
     method: 'PUT',
     body: {
       ...params,
