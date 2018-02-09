@@ -7,7 +7,6 @@ import {
   Card,
   Tabs,
   Table,
-  Radio,
   DatePicker,
   Tooltip,
   Menu,
@@ -21,9 +20,7 @@ import {
   MiniBar,
   MiniProgress,
   Field,
-  Bar,
   Pie,
-  TimelineChart,
 } from '../../components/Charts';
 import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
@@ -31,7 +28,6 @@ import { getTimeDistance } from '../../utils/utils';
 
 import styles from './Analysis.less';
 
-const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
 const rankingListData = [];
@@ -48,9 +44,7 @@ for (let i = 0; i < 7; i += 1) {
 }))
 export default class Analysis extends Component {
   state = {
-    salesType: 'all',
     currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
   };
 
   componentDidMount() {
@@ -65,12 +59,6 @@ export default class Analysis extends Component {
       type: 'chart/clear',
     });
   }
-
-  handleChangeSalesType = (e) => {
-    this.setState({
-      salesType: e.target.value,
-    });
-  };
 
   handleTabChange = (key) => {
     this.setState({
@@ -169,33 +157,6 @@ export default class Analysis extends Component {
         align: 'right',
       },
     ];
-
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
-
-    const CustomTab = ({ data, currentTabKey: currentKey }) => (
-      <Row gutter={8} style={{ width: 138, margin: '8px 0' }}>
-        <Col span={12}>
-          <NumberInfo
-            title={data.name}
-            subTitle="转化率"
-            gap={2}
-            total={`${data.cvr * 100}%`}
-            theme={currentKey !== data.name && 'light'}
-          />
-        </Col>
-        <Col span={12} style={{ paddingTop: 36 }}>
-          <Pie
-            animate={false}
-            color={currentKey !== data.name && '#BDE4FF'}
-            inner={0.55}
-            tooltip={false}
-            margin={[0, 0, 0, 0]}
-            percent={data.cvr * 100}
-            height={64}
-          />
-        </Col>
-      </Row>
-    );
 
     const topColResponsiveProps = {
       xs: 24,
